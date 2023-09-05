@@ -5,8 +5,11 @@ window.onload = function () {
 const selectUbication = document.getElementById("selectUbication");
 selectUbication.addEventListener("change", function () {
     Llamada1();
- 
+    let info = "";
 })
+
+
+
 
 function Llamada1() {
     var selectUbication = document.getElementById("selectUbication");
@@ -46,17 +49,35 @@ function Llamada1() {
                 }
 
                 // Aquí puedes manejar la respuesta de las solicitudes de municipios (muni) y mostrarla en tu página web.
+                // ... Código anterior ...
+
                 Promise.all(muni)
                     .then(responses => {
                         return Promise.all(responses.map(response => response.json()));
                     })
                     .then(municipios => {
                         console.log(municipios);
-                        // Aquí puedes usar "municipios" para mostrar la lista de municipios en tu página.
+
+                        if (municipios && municipios.length > 0) {
+                            const opcionMuni = document.getElementById('selectMuni');
+                            opcionMuni.innerHTML = "";
+
+                            municipios.forEach(opcionesMuni => {
+                                // Accede a las propiedades dentro del objeto opcionesMuni
+                                var option = document.createElement("option");
+                                option.value = opcionesMuni[0].municipio_id; // Utiliza la propiedad 'municipio_id' para el valor
+                                option.text = opcionesMuni[0].nombre; // Utiliza la propiedad 'nombre' para el texto
+                                opcionMuni.appendChild(option);
+                            });
+                            
+                        } else {
+                            console.error("La variable 'municipios' está vacía o no está definida.");
+                        }
                     })
                     .catch(error => {
                         console.error('Error al obtener datos de municipios:', error);
                     });
+
             }
         })
         .catch(error => {
